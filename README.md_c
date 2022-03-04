@@ -1,0 +1,63 @@
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <stdlib.h>
+
+int seat[1000][1000],N;
+int res[6][2], c1=0;
+
+void ebola_crisis_risk(int i, int j)
+{
+    //check 8 directions
+    if(i>0 && j>0 && seat[i-1][j-1] == 1){ c1++; seat[i-1][j-1] = 0;} //up left diagonal
+    if(i>0 && seat[i-1][j] == 1){ c1++; seat[i-1][j] = 0;} //up
+    if(i>0 && j<N-1 && seat[i-1][j+1] == 1){ c1++; seat[i-1][j+1] = 0;} //up right diagonal
+    if(j>0 && seat[i][j-1] == 1){ c1++; seat[i][j-1] = 0;} //left
+    if(j<N-1 && seat[i][j+1] == 1){ c1++; seat[i][j+1] = 0;} //right
+    if(i<N-1 && j<N-1 && seat[i+1][j+1] == 1){ c1++; seat[i+1][j+1] = 0;} //right down diagonal
+    if(i<N-1 && seat[i+1][j] == 1){ c1++; seat[i+1][j] = 0;} //down
+    if(i<N-1 && j>0 && seat[i+1][j-1] == 1){ c1++; seat[i+1][j-1] = 0;} //left down diagonal
+    
+}
+void find(int x)
+{
+    int c=0;c1=0;
+    for(int i=0; i<N; i++)
+    {
+        for(int j=0; j<N; j++)
+        {
+            if(seat[i][j] == x)
+            {
+                c++;
+                ebola_crisis_risk(i,j);
+            }
+        }
+    }
+    res[x][0] = c;
+    res[x][1] = c1;
+}
+int main() 
+{
+    scanf("%d",&N);
+    for(int i=0; i<N; i++)
+    {
+        for(int j=0; j<N; j++)
+        {
+            scanf("%d",&seat[i][j]);
+        }
+    }
+    
+    for(int i=5; i>=2; i--)//type 5 virus affect first, so search first
+        find(i);
+    
+    for(int i=2; i<6; i++)//virus type from 2 to 5 (0 - empty seat, 1 - healthy person)
+        printf("%d ",res[i][0]);// total infected based on type
+    
+    printf("\n");
+        
+    for(int i=2; i<6; i++)//virus type from 2 to 5 (0 - empty seat, 1 - healthy person)
+        printf("%d ",res[i][1]); //total higher risk based on type
+    
+        
+    return 0;
+}

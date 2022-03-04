@@ -1,1 +1,0 @@
-# HackerRank-Ebola-Crisis-in-c
